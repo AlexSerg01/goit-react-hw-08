@@ -3,8 +3,9 @@ import { useId } from "react";
 import * as Yup from "yup";
 import { ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
+
 import css from "./ContactForm.module.css";
-import { addContact } from "../../redux/contactsOps";
+import { addContact } from "../../redux/contacts/operations";
 
 export default function ContactForm() {
   const nameId = useId();

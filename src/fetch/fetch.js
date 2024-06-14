@@ -1,23 +1,67 @@
 import axios from "axios";
 
-const BASE_URL = "https://66657e20d122c2868e40d528.mockapi.io/";
-const END_POINTS = "contacts/";
-const url = `${BASE_URL}${END_POINTS}`;
+function setAuthHeader(token) {
+  axios.defaults.headers.common.Authorization = token;
+}
+
+function deleteAuthHeader() {
+  axios.defaults.headers.common.Authorization = "";
+}
+axios.defaults.baseURL = "https://connections-api.herokuapp.com";
 
 async function getTasks() {
-  const response = await axios.get(url);
+  const response = await axios.get("/contacts");
   return response.data;
 }
 
 async function addTask(data) {
-  const response = await axios.post(url, data);
+  const response = await axios.post("/contacts", data);
   return response.data;
 }
 
 async function deleteTask(id) {
-  const deleteUrl = `${url}/${id}`;
-  const response = await axios.delete(deleteUrl);
+  const response = await axios.delete(`/contacts/${id}`);
   return response.data.id;
 }
 
-export { getTasks, addTask, deleteTask };
+async function updateTask(data) {
+  const response = await axios.patch(`/contacts/${data.id}`, data.data);
+  return response;
+}
+
+// -----------------------------------------------------------
+
+async function registerFetch(data) {
+  axios.defaults.baseURL = "https://connections-api.herokuapp.com";
+  const response = await axios.post("users/signup", data);
+  return response;
+}
+
+async function logInFetch(data) {
+  const response = await axios.post("users/login", data);
+  return response;
+}
+
+async function logOutFetch() {
+  await axios.post("users/logout");
+  // console.log('object')
+  deleteAuthHeader();
+}
+
+async function refreshUserFetch() {
+  const response = await axios.get("users/current");
+  // console.log(response)
+  return response;
+}
+
+export {
+  getTasks,
+  addTask,
+  deleteTask,
+  registerFetch,
+  logInFetch,
+  logOutFetch,
+  setAuthHeader,
+  updateTask,
+  refreshUserFetch,
+};
