@@ -3,14 +3,14 @@ import { lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import PrivateRoute from "../components/PrivatRoute/PrivatRoute";
-import RestrictedRoute from "../components/RestrictedRoute/RestrictedRoute";
+import RestrictedRoute from "../components/RestrictedRoute/RegistrationRoute";
 import Layout from "./Layout";
 import { refreshUser } from "../redux/auth/operations";
 import { selectIsRefreshing, selectIsLoggedIn } from "../redux/auth/selectors";
 import { logout } from "../redux/auth/operations";
 
 const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
-const ContactsPage = lazy(() => import("../pages/ContactsPage/ContactsPage"));
+const ContactsPage = lazy(() => import("../pages/ContactsPage/ContsctsPage"));
 const RegistrationForm = lazy(() =>
   import("../components/RegistrationForm/RegistrationForm")
 );

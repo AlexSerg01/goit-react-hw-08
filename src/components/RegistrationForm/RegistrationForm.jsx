@@ -14,7 +14,6 @@ export default function RegisterMenu() {
     name: "",
     email: "",
     password: "",
-    passwordRepeat: "",
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -28,18 +27,10 @@ export default function RegisterMenu() {
       .min(7, "at least 7 characters")
       .max(15, "No more than 15 characters")
       .required("enter your password"),
-    passwordRepeat: Yup.string()
-      .oneOf(
-        [Yup.ref("password"), null],
-        "There is a difference between password"
-      )
-      .required("There is a difference between password"),
   });
 
   function submitHandler(values, actions) {
-    const { passwordRepeat, ...data } = values;
-    console.log(values);
-    dispatch(register(data));
+    dispatch(register(values));
     actions.resetForm();
   }
 
@@ -89,15 +80,6 @@ export default function RegisterMenu() {
           <ErrorMessage
             className={css.error}
             name="password"
-            component="span"
-          ></ErrorMessage>
-          <label>
-            Repeat your password:
-            <Field type="password" name="passwordRepeat"></Field>
-          </label>
-          <ErrorMessage
-            className={css.error}
-            name="passwordRepeat"
             component="span"
           ></ErrorMessage>
           <button type="submit">Register</button>
