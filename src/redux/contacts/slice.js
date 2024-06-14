@@ -6,11 +6,14 @@ import {
   fetchContacts,
   deleteContact,
   updateContact,
+  logOut,
 } from "./operations";
 
 function errorHandler(state, action) {
   state.error = action.payload;
-  toast("Oops, try again", { style: { backgroundColor: "red" } });
+  toast(`Error: ${action.payload.message}`, {
+    style: { backgroundColor: "red" },
+  });
 }
 
 function loadingHandler(state) {
@@ -47,8 +50,10 @@ const contactsSlice = createSlice({
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.error = null;
         state.loading = false;
-        const elem = state.items.find((item) => item.id === action.payload);
-        state.items.splice(state.items.indexOf(elem), 1);
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload
+        );
+        if (index !== -1) state.items.splice(index, 1);
         toast("Successfully deleted", { style: { backgroundColor: "green" } });
       })
       .addCase(deleteContact.rejected, errorHandler)
@@ -56,12 +61,22 @@ const contactsSlice = createSlice({
       .addCase(updateContact.fulfilled, (state, action) => {
         state.error = null;
         state.loading = false;
-        const elem = state.items.find((item) => item.id === action.payload);
-        state.items.splice(state.items.indexOf(elem), 1, action.payload);
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        if (index !== -1) state.items[index] = action.payload;
         toast("Successfully updated", { style: { backgroundColor: "green" } });
       })
-      .addCase(updateContact.rejected, errorHandler);
+      .addCase(updateContact.rejected, errorHandler)
+      .addCase(logOut.fulfilled, (state) => {
+        state.items = [];
+        state.error = null;
+        state.loading = false;
+        toast("Logged out and contacts cleared", {
+          style: { backgroundColor: "green" },
+        });
+      });
   },
 });
 
-export const contactsReduser = contactsSlice.reducer;
+export const contactsReducer = contactsSlice.reducer;
