@@ -11,9 +11,7 @@ import {
 
 function errorHandler(state, action) {
   state.error = action.payload;
-  toast(`Error: ${action.payload.message}`, {
-    style: { backgroundColor: "red" },
-  });
+  toast("Oops, try again", { style: { backgroundColor: "red" } });
 }
 
 function loadingHandler(state) {
@@ -50,10 +48,8 @@ const contactsSlice = createSlice({
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.error = null;
         state.loading = false;
-        const index = state.items.findIndex(
-          (item) => item.id === action.payload
-        );
-        if (index !== -1) state.items.splice(index, 1);
+        const elem = state.items.find((item) => item.id === action.payload);
+        state.items.splice(state.items.indexOf(elem), 1);
         toast("Successfully deleted", { style: { backgroundColor: "green" } });
       })
       .addCase(deleteContact.rejected, errorHandler)
@@ -61,10 +57,8 @@ const contactsSlice = createSlice({
       .addCase(updateContact.fulfilled, (state, action) => {
         state.error = null;
         state.loading = false;
-        const index = state.items.findIndex(
-          (item) => item.id === action.payload.id
-        );
-        if (index !== -1) state.items[index] = action.payload;
+        const elem = state.items.find((item) => item.id === action.payload);
+        state.items.splice(state.items.indexOf(elem), 1, action.payload);
         toast("Successfully updated", { style: { backgroundColor: "green" } });
       })
       .addCase(updateContact.rejected, errorHandler)
@@ -79,4 +73,4 @@ const contactsSlice = createSlice({
   },
 });
 
-export const contactsReducer = contactsSlice.reducer;
+export const contactsReduser = contactsSlice.reducer;

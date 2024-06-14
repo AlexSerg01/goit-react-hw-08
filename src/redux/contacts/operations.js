@@ -1,6 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { addTask, getTasks, deleteTask, updateTask } from "../../fetch/fetch";
+import {
+  addTask,
+  getTasks,
+  deleteTask,
+  updateTask,
+  logOutFetch,
+} from "../../fetch/fetch";
 
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchAll",
@@ -44,6 +50,17 @@ export const updateContact = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await updateTask(data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const logOut = createAsyncThunk(
+  "contacts/logOut",
+  async (data, thunkAPI) => {
+    try {
+      const response = await logOutFetch(data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
